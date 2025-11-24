@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 
 const DEFAULT_CONTACT = {
@@ -32,6 +32,7 @@ const DEFAULT_CONTACT = {
   messageLabel: 'Message',
   messagePlaceholder: 'Tell us about your business needs and how we can help...',
   submitText: 'Send Message',
+  successMessage: "Message sent successfully! We'll get back to you within 24 hours.",
   contactInfo: [
     {
       icon: 'Mail',
@@ -73,6 +74,7 @@ export default function Contact(props: ContactProps) {
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -83,17 +85,22 @@ export default function Contact(props: ContactProps) {
     setIsSubmitting(true);
 
     // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: '',
-    });
+    setIsSubmitted(true);
     setIsSubmitting(false);
+
+    // Reset form after success message
+    setTimeout(() => {
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+      });
+      setIsSubmitted(false);
+    }, 3000);
   };
 
   const getIcon = (iconName: string) => {
@@ -105,7 +112,7 @@ export default function Contact(props: ContactProps) {
       case 'MapPin':
         return <MapPin className="h-6 w-6" />;
       default:
-        return <Clock className="h-6 w-6" />;
+        return <Mail className="h-6 w-6" />;
     }
   };
 
@@ -114,19 +121,19 @@ export default function Contact(props: ContactProps) {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             <span data-editable="title">{config.title}</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             <span data-editable="subtitle">{config.subtitle}</span>
           </p>
         </div>
 
-        <div className="grid gap-12 lg:grid-cols-2">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Contact Form */}
-          <Card className="bg-card text-card-foreground">
-            <CardHeader>
-              <CardTitle className="text-2xl">
+          <Card className="bg-card text-card-foreground shadow-lg border-border/50">
+            <CardHeader className="pb-6">
+              <CardTitle className="text-2xl font-bold">
                 <span data-editable="formTitle">{config.formTitle}</span>
               </CardTitle>
               <p className="text-muted-foreground">
@@ -134,135 +141,145 @@ export default function Contact(props: ContactProps) {
               </p>
             </CardHeader>
             <CardContent>
-              <form
-                onSubmit={handleSubmit}
-                className="space-y-6"
-                data-form-id="69248a31bf9881884ee4a967"
-              >
-                {/* Name Field */}
-                <div className="space-y-2">
-                  <Label htmlFor="name">
-                    <span data-editable="nameLabel">{config.nameLabel}</span>
-                  </Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder={config.namePlaceholder}
-                    value={formData.name}
-                    onChange={e => handleInputChange('name', e.target.value)}
-                    required
-                    className="bg-background border-border"
-                  />
+              {isSubmitted ? (
+                <div className="text-center py-12">
+                  <CheckCircle className="h-16 w-16 text-primary mx-auto mb-4" />
+                  <p className="text-lg font-medium text-foreground">
+                    <span data-editable="successMessage">{config.successMessage}</span>
+                  </p>
                 </div>
-
-                {/* Email Field */}
-                <div className="space-y-2">
-                  <Label htmlFor="email">
-                    <span data-editable="emailLabel">{config.emailLabel}</span>
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder={config.emailPlaceholder}
-                    value={formData.email}
-                    onChange={e => handleInputChange('email', e.target.value)}
-                    required
-                    className="bg-background border-border"
-                  />
-                </div>
-
-                {/* Phone Field */}
-                <div className="space-y-2">
-                  <Label htmlFor="phone">
-                    <span data-editable="phoneLabel">{config.phoneLabel}</span>
-                  </Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder={config.phonePlaceholder}
-                    value={formData.phone}
-                    onChange={e => handleInputChange('phone', e.target.value)}
-                    className="bg-background border-border"
-                  />
-                </div>
-
-                {/* Subject Field */}
-                <div className="space-y-2">
-                  <Label htmlFor="subject">
-                    <span data-editable="subjectLabel">{config.subjectLabel}</span>
-                  </Label>
-                  <Select
-                    value={formData.subject}
-                    onValueChange={value => handleInputChange('subject', value)}
-                  >
-                    <SelectTrigger className="bg-background border-border">
-                      <SelectValue placeholder={config.subjectPlaceholder} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {config.subjectOptions.map((option, idx) => (
-                        <SelectItem key={idx} value={option}>
-                          <span data-editable={`subjectOptions[${idx}]`}>{option}</span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Message Field */}
-                <div className="space-y-2">
-                  <Label htmlFor="message">
-                    <span data-editable="messageLabel">{config.messageLabel}</span>
-                  </Label>
-                  <Textarea
-                    id="message"
-                    placeholder={config.messagePlaceholder}
-                    value={formData.message}
-                    onChange={e => handleInputChange('message', e.target.value)}
-                    required
-                    rows={5}
-                    className="bg-background border-border resize-none"
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+              ) : (
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-6"
+                  data-form-id="69248a31bf9881884ee4a967"
                 >
-                  {isSubmitting ? (
-                    <div className="flex items-center gap-2">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
-                      Sending...
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-sm font-medium">
+                        <span data-editable="nameLabel">{config.nameLabel}</span>
+                      </Label>
+                      <Input
+                        id="name"
+                        type="text"
+                        placeholder={config.namePlaceholder}
+                        value={formData.name}
+                        onChange={e => handleInputChange('name', e.target.value)}
+                        required
+                        className="bg-background border-border focus:border-primary transition-colors"
+                      />
                     </div>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Send className="h-4 w-4" />
-                      <span data-editable="submitText">{config.submitText}</span>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-medium">
+                        <span data-editable="emailLabel">{config.emailLabel}</span>
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder={config.emailPlaceholder}
+                        value={formData.email}
+                        onChange={e => handleInputChange('email', e.target.value)}
+                        required
+                        className="bg-background border-border focus:border-primary transition-colors"
+                      />
                     </div>
-                  )}
-                </Button>
-              </form>
+                  </div>
+
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-sm font-medium">
+                        <span data-editable="phoneLabel">{config.phoneLabel}</span>
+                      </Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder={config.phonePlaceholder}
+                        value={formData.phone}
+                        onChange={e => handleInputChange('phone', e.target.value)}
+                        className="bg-background border-border focus:border-primary transition-colors"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="subject" className="text-sm font-medium">
+                        <span data-editable="subjectLabel">{config.subjectLabel}</span>
+                      </Label>
+                      <Select
+                        value={formData.subject}
+                        onValueChange={value => handleInputChange('subject', value)}
+                      >
+                        <SelectTrigger className="bg-background border-border focus:border-primary">
+                          <SelectValue placeholder={config.subjectPlaceholder} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {config.subjectOptions.map((option, idx) => (
+                            <SelectItem key={idx} value={option}>
+                              <span data-editable={`subjectOptions[${idx}]`}>{option}</span>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="message" className="text-sm font-medium">
+                      <span data-editable="messageLabel">{config.messageLabel}</span>
+                    </Label>
+                    <Textarea
+                      id="message"
+                      placeholder={config.messagePlaceholder}
+                      value={formData.message}
+                      onChange={e => handleInputChange('message', e.target.value)}
+                      required
+                      rows={5}
+                      className="bg-background border-border focus:border-primary transition-colors resize-none"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 h-12"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
+                        Sending...
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Send className="h-4 w-4" />
+                        <span data-editable="submitText">{config.submitText}</span>
+                      </div>
+                    )}
+                  </Button>
+                </form>
+              )}
             </CardContent>
           </Card>
 
           {/* Contact Information */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             {config.contactInfo.map((info, idx) => (
-              <Card key={idx} className="bg-muted text-muted-foreground">
+              <Card
+                key={idx}
+                className="bg-muted/50 text-muted-foreground border-border/50 hover:bg-muted/70 transition-colors"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="bg-primary text-primary-foreground p-3 rounded-lg">
+                    <div className="bg-primary text-primary-foreground p-3 rounded-xl shadow-sm">
                       {getIcon(info.icon)}
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-foreground mb-1">
+                      <h3 className="font-semibold text-foreground mb-2 text-lg">
                         <span data-editable={`contactInfo[${idx}].title`}>{info.title}</span>
                       </h3>
                       <p className="text-lg font-medium text-foreground mb-1">
                         <span data-editable={`contactInfo[${idx}].value`}>{info.value}</span>
                       </p>
-                      <p className="text-sm">
+                      <p className="text-sm text-muted-foreground">
                         <span data-editable={`contactInfo[${idx}].description`}>
                           {info.description}
                         </span>

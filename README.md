@@ -7,11 +7,11 @@ Generated with AI Website Builder - Template-based Assembly System
 This project was generated using a local Next.js template enhanced with AI-generated content.
 
 - **Industry**: finance
-- **Style**: corporate
+- **Style**: modern
 - **Brand**: FinTech Startup
 - **Pages**: 2
 - **Components**: 0
-- **Theme**: corporate preset with AI-generated colors
+- **Theme**: minimal preset with AI-generated colors
 
 ## 🛠️ Tech Stack
 
@@ -153,7 +153,7 @@ npm run dev
 
 ## 🎨 Theme Customization
 
-This project uses the **corporate** preset with custom OKLCH colors.
+This project uses the **minimal** preset with custom OKLCH colors.
 
 The theme colors are defined in `src/app/globals.css` using CSS variables in OKLCH format:
 
@@ -170,4 +170,4 @@ To modify the theme, update the CSS variables in the `:root` selector.
 This project is private and proprietary.
 
 ---
-Generated on 2025-11-24T16:39:14.376Z
+Generated on 2025-11-24T16:48:33.685Z
