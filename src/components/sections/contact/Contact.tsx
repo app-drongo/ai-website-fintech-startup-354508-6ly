@@ -12,13 +12,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, Users, TrendingUp, Shield } from 'lucide-react';
 import { useState } from 'react';
 
 const DEFAULT_CONTACT = {
   title: 'Get in Touch',
   subtitle:
     "Ready to transform your business finances? Let's discuss how our fintech solutions can help your small business thrive.",
+  aboutTitle: 'About Our Mission',
+  aboutDescription:
+    'We are dedicated to empowering small businesses with cutting-edge financial technology. Our team of experts combines deep industry knowledge with innovative solutions to help you achieve financial success.',
+  aboutStats: [
+    { icon: 'Users', value: '10,000+', label: 'Businesses Served' },
+    { icon: 'TrendingUp', value: '98%', label: 'Client Satisfaction' },
+    { icon: 'Shield', value: '24/7', label: 'Security Monitoring' },
+  ],
   formTitle: 'Send us a message',
   formDescription: "Fill out the form below and we'll get back to you within 24 hours.",
   nameLabel: 'Full Name',
@@ -111,6 +119,12 @@ export default function Contact(props: ContactProps) {
         return <Phone className="h-6 w-6" />;
       case 'MapPin':
         return <MapPin className="h-6 w-6" />;
+      case 'Users':
+        return <Users className="h-8 w-8" />;
+      case 'TrendingUp':
+        return <TrendingUp className="h-8 w-8" />;
+      case 'Shield':
+        return <Shield className="h-8 w-8" />;
       default:
         return <Mail className="h-6 w-6" />;
     }
@@ -127,6 +141,42 @@ export default function Contact(props: ContactProps) {
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             <span data-editable="subtitle">{config.subtitle}</span>
           </p>
+        </div>
+
+        {/* About Section */}
+        <div className="mb-16">
+          <Card className="bg-primary/5 border-primary/20 overflow-hidden">
+            <CardContent className="p-8 lg:p-12">
+              <div className="grid gap-12 lg:grid-cols-2 items-center">
+                <div>
+                  <h2 className="text-3xl font-bold mb-6 text-foreground">
+                    <span data-editable="aboutTitle">{config.aboutTitle}</span>
+                  </h2>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    <span data-editable="aboutDescription">{config.aboutDescription}</span>
+                  </p>
+                </div>
+                <div className="grid gap-6 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                  {config.aboutStats.map((stat, idx) => (
+                    <div
+                      key={idx}
+                      className="text-center p-6 bg-background/50 rounded-xl border border-border/50"
+                    >
+                      <div className="text-primary mb-3 flex justify-center">
+                        {getIcon(stat.icon)}
+                      </div>
+                      <div className="text-2xl font-bold text-foreground mb-1">
+                        <span data-editable={`aboutStats[${idx}].value`}>{stat.value}</span>
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        <span data-editable={`aboutStats[${idx}].label`}>{stat.label}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">

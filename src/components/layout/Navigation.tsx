@@ -12,6 +12,7 @@ const DEFAULT_NAVIGATION = {
   navItems: [
     { label: 'Home', href: '#hero' },
     { label: 'Features', href: '#features' },
+    { label: 'About', href: '#about' },
     { label: 'Contact', href: '/contact' },
   ],
   ctaText: 'Get Started',
@@ -73,11 +74,12 @@ export default function Navigation(props: NavigationProps) {
               <button
                 key={idx}
                 onClick={() => handleNavClick(item.href)}
-                className="text-foreground hover:text-primary transition-colors font-medium"
+                className="text-foreground hover:text-primary transition-colors font-medium relative group"
                 data-editable-href={`navItems[${idx}].href`}
                 data-href={item.href}
               >
                 <span data-editable={`navItems[${idx}].label`}>{item.label}</span>
+                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></div>
               </button>
             ))}
           </div>
@@ -86,7 +88,7 @@ export default function Navigation(props: NavigationProps) {
           <div className="hidden md:block">
             <Button
               onClick={handleCTAClick}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               data-editable-href="ctaHref"
               data-href={config.ctaHref}
             >
@@ -100,7 +102,7 @@ export default function Navigation(props: NavigationProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden text-foreground hover:text-primary hover:bg-accent"
+                className="md:hidden text-foreground hover:text-primary hover:bg-accent transition-colors"
               >
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Open menu</span>
@@ -131,12 +133,12 @@ export default function Navigation(props: NavigationProps) {
                 </div>
 
                 {/* Mobile Navigation Links */}
-                <div className="flex flex-col space-y-4 py-6 flex-1">
+                <div className="flex flex-col space-y-2 py-6 flex-1">
                   {config.navItems.map((item, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleNavClick(item.href)}
-                      className="text-left text-lg font-medium text-card-foreground hover:text-primary transition-colors py-2 px-4 rounded-lg hover:bg-accent"
+                      className="text-left text-lg font-medium text-card-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-accent border border-transparent hover:border-border"
                       data-editable-href={`navItems[${idx}].href`}
                       data-href={item.href}
                     >
@@ -149,7 +151,7 @@ export default function Navigation(props: NavigationProps) {
                 <div className="pt-6 border-t border-border">
                   <Button
                     onClick={handleCTAClick}
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl"
                     data-editable-href="ctaHref"
                     data-href={config.ctaHref}
                   >
